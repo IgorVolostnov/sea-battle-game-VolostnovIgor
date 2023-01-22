@@ -1,103 +1,41 @@
+# Создаем класс "Игровое поле"
 class PlayingField:
     def __init__(self, my_field_values, enemy_field_values):
         self.my_field_values = my_field_values
         self.enemy_field_values = enemy_field_values
 
+    # Вывод на экран Игрового поля
     @property
     def output_screen(self):
         separator = "          "
+        number_field = [" "]
         name_field = ["        Моё поле       ", separator, "    Поле противника    "]
         string_letters_table = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "К"]
-        string_numbers_table = "".join([
-            "  ", "\u0332" + "1",
-            " ", "\u0332" + "2",
-            " ", "\u0332" + "3",
-            " ", "\u0332" + "4",
-            " ", "\u0332" + "5",
-            " ", "\u0332" + "6",
-            " ", "\u0332" + "7",
-            " ", "\u0332" + "8",
-            " ", "\u0332" + "9",
-            " ", "\u0332" + "10"
-        ])
+        for number_ in range(1, 11):
+            element_string = " " + "\u0332" + str(number_)
+            number_field.append(element_string)
+        string_numbers_table = "".join(number_field)
         screen = [name_field, string_numbers_table + separator + string_numbers_table]
         for letter in string_letters_table:
-            list_row = [
-                letter,
-                "|", "\u0332" + self.my_field_values[letter + "1"],
-                "|", "\u0332" + self.my_field_values[letter + "2"],
-                "|", "\u0332" + self.my_field_values[letter + "3"],
-                "|", "\u0332" + self.my_field_values[letter + "4"],
-                "|", "\u0332" + self.my_field_values[letter + "5"],
-                "|", "\u0332" + self.my_field_values[letter + "6"],
-                "|", "\u0332" + self.my_field_values[letter + "7"],
-                "|", "\u0332" + self.my_field_values[letter + "8"],
-                "|", "\u0332" + self.my_field_values[letter + "9"],
-                "|", "\u0332" + self.my_field_values[letter + "10"],
-                "|",
-                separator,
-                letter,
-                "|", "\u0332" + self.enemy_field_values[letter + "1"],
-                "|", "\u0332" + self.enemy_field_values[letter + "2"],
-                "|", "\u0332" + self.enemy_field_values[letter + "3"],
-                "|", "\u0332" + self.enemy_field_values[letter + "4"],
-                "|", "\u0332" + self.enemy_field_values[letter + "5"],
-                "|", "\u0332" + self.enemy_field_values[letter + "6"],
-                "|", "\u0332" + self.enemy_field_values[letter + "7"],
-                "|", "\u0332" + self.enemy_field_values[letter + "8"],
-                "|", "\u0332" + self.enemy_field_values[letter + "9"],
-                "|", "\u0332" + self.enemy_field_values[letter + "10"],
-                "|"
-            ]
+            my_value_field = [letter]
+            enemy_value_field = [letter]
+            for number_ in range(1, 11):
+                my_list_row_value = "|" + "\u0332" + self.my_field_values[letter + str(number_)]
+                my_value_field.append(my_list_row_value)
+                enemy_list_row_value = "|" + "\u0332" + self.enemy_field_values[letter + str(number_)]
+                enemy_value_field.append(enemy_list_row_value)
+            list_row = ["".join(my_value_field) + "|" + separator + "".join(enemy_value_field) + "|"]
             screen.append(list_row)
         for i in range(12):
             print("".join(screen[i]))
 
-
-# Код игры
-Value_PlayingField = PlayingField({
-    "А1": " ", "А2": " ", "А3": " ", "А4": " ", "А5": " ",
-    "А6": " ", "А7": " ", "А8": " ", "А9": " ", "А10": " ",
-    "Б1": " ", "Б2": " ", "Б3": " ", "Б4": " ", "Б5": " ",
-    "Б6": " ", "Б7": " ", "Б8": " ", "Б9": " ", "Б10": " ",
-    "В1": " ", "В2": " ", "В3": " ", "В4": " ", "В5": " ",
-    "В6": " ", "В7": " ", "В8": " ", "В9": " ", "В10": " ",
-    "Г1": " ", "Г2": " ", "Г3": " ", "Г4": " ", "Г5": " ",
-    "Г6": " ", "Г7": " ", "Г8": " ", "Г9": " ", "Г10": " ",
-    "Д1": " ", "Д2": " ", "Д3": " ", "Д4": " ", "Д5": " ",
-    "Д6": " ", "Д7": " ", "Д8": " ", "Д9": " ", "Д10": " ",
-    "Е1": " ", "Е2": " ", "Е3": " ", "Е4": " ", "Е5": " ",
-    "Е6": " ", "Е7": " ", "Е8": " ", "Е9": " ", "Е10": " ",
-    "Ж1": " ", "Ж2": " ", "Ж3": " ", "Ж4": " ", "Ж5": " ",
-    "Ж6": " ", "Ж7": " ", "Ж8": " ", "Ж9": " ", "Ж10": " ",
-    "З1": " ", "З2": " ", "З3": " ", "З4": " ", "З5": " ",
-    "З6": " ", "З7": " ", "З8": " ", "З9": " ", "З10": " ",
-    "И1": " ", "И2": " ", "И3": " ", "И4": " ", "И5": " ",
-    "И6": " ", "И7": " ", "И8": " ", "И9": " ", "И10": " ",
-    "К1": " ", "К2": " ", "К3": " ", "К4": " ", "К5": " ",
-    "К6": " ", "К7": " ", "К8": " ", "К9": " ", "К10": " "
-    },
-    {
-    "А1": " ", "А2": " ", "А3": " ", "А4": " ", "А5": " ",
-    "А6": " ", "А7": " ", "А8": " ", "А9": " ", "А10": " ",
-    "Б1": " ", "Б2": " ", "Б3": " ", "Б4": " ", "Б5": " ",
-    "Б6": " ", "Б7": " ", "Б8": " ", "Б9": " ", "Б10": " ",
-    "В1": " ", "В2": " ", "В3": " ", "В4": " ", "В5": " ",
-    "В6": " ", "В7": " ", "В8": " ", "В9": " ", "В10": " ",
-    "Г1": " ", "Г2": " ", "Г3": " ", "Г4": " ", "Г5": " ",
-    "Г6": " ", "Г7": " ", "Г8": " ", "Г9": " ", "Г10": " ",
-    "Д1": " ", "Д2": " ", "Д3": " ", "Д4": " ", "Д5": " ",
-    "Д6": " ", "Д7": " ", "Д8": " ", "Д9": " ", "Д10": " ",
-    "Е1": " ", "Е2": " ", "Е3": " ", "Е4": " ", "Е5": " ",
-    "Е6": " ", "Е7": " ", "Е8": " ", "Е9": " ", "Е10": " ",
-    "Ж1": " ", "Ж2": " ", "Ж3": " ", "Ж4": " ", "Ж5": " ",
-    "Ж6": " ", "Ж7": " ", "Ж8": " ", "Ж9": " ", "Ж10": " ",
-    "З1": " ", "З2": " ", "З3": " ", "З4": " ", "З5": " ",
-    "З6": " ", "З7": " ", "З8": " ", "З9": " ", "З10": " ",
-    "И1": " ", "И2": " ", "И3": " ", "И4": " ", "И5": " ",
-    "И6": " ", "И7": " ", "И8": " ", "И9": " ", "И10": " ",
-    "К1": " ", "К2": " ", "К3": " ", "К4": " ", "К5": " ",
-    "К6": " ", "К7": " ", "К8": " ", "К9": " ", "К10": " "
-})
-
-Value_PlayingField.output_screen
+    def location_ships(self, coordinates):
+        shit = coordinates[0]
+        value_around_shit = coordinates[1]
+        for key, item in shit.items():
+            if key in self.my_field_values.keys():
+                self.my_field_values[key] = item
+        for key, item in value_around_shit.items():
+            if key in self.my_field_values.keys():
+                self.my_field_values[key] = item
+        return self.my_field_values
