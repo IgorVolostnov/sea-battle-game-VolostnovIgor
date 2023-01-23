@@ -1,8 +1,10 @@
 # Создаем класс "Корабль"
 class Ship:
 
-    def __init__(self, ship_coordinates):
+    def __init__(self, ship_coordinates, dict_values, condition_ship):
         self.ship_coordinates = ship_coordinates
+        self.dict_values = dict_values
+        self.condition_ship = condition_ship
 
     # Позиции четырехпалубных кораблей
     @staticmethod
@@ -159,7 +161,7 @@ class Ship:
 
     @property
     def enter_coordinates_ship(self):
-        return self.ship_coordinates
+        return self.dict_values
 
     @enter_coordinates_ship.setter
     def enter_coordinates_ship(self, value):
@@ -182,30 +184,36 @@ class Ship:
             raise ValueError(
                 "Вы не правильно ввели данные, нужно ввести координаты слитно перечислив те клетки, "
                 "в которых Вы хотите разместить корабль, например, А4А5А6А7 или Г3Д3Е3: ")
-
+        for key, item in self.ship_coordinates[0].items():
+            if key in self.dict_values.keys():
+                self.dict_values[key] = item
+        for key, item in self.ship_coordinates[1].items():
+            if key in self.dict_values.keys():
+                self.dict_values[key] = item
+        return self.dict_values
     @property
     def fleet(self):
         return self.fleet_composition
 
     @fleet.setter
     def fleet(self, value):
-        fleet_composition = [[], [], [], []]
-        if len(value) == 8:
-            if len(fleet_composition[0] < 1):
-                fleet_composition[0].append(value)
+        self.fleet_composition = [[], [], [], []]
+        if len(value[0]) == 4:
+            if len(self.fleet_composition[0]) < 1:
+                self.fleet_composition[0].append(value)
             else:
                 raise ValueError("Вы уже добавили четырехпалубный корабль, добавьте оставшиеся корабли!")
-        elif len(value) == 6:
-            if len(fleet_composition[1] < 2):
-                fleet_composition[1].append(value)
+        elif len(value[0]) == 3:
+            if len(self.fleet_composition[1]) < 2:
+                self.fleet_composition[1].append(value)
             else:
                 raise ValueError("Вы уже добавили все трехпалубные корабли, добавьте оставшиеся корабли!")
-        elif len(value) == 4:
-            if len(fleet_composition[2] < 3):
-                fleet_composition[2].append(value)
+        elif len(value[0]) == 2:
+            if len(self.fleet_composition[2]) < 3:
+                self.fleet_composition[2].append(value)
             else:
                 raise ValueError("Вы уже добавили все двухпалубные корабли, добавьте оставшиеся корабли!")
         else:
-            if len(fleet_composition[3] < 4):
-                fleet_composition[3].append(value)
-        return fleet_composition
+            if len(self.fleet_composition[3]) < 4:
+                self.fleet_composition[3].append(value)
+        return self.fleet_composition
