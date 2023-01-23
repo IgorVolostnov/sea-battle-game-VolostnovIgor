@@ -189,14 +189,23 @@ class Ship:
 
     @fleet.setter
     def fleet(self, value):
-        fleet_composition = []
+        fleet_composition = [[], [], [], []]
         if len(value) == 8:
-            if value in Ship.Positions_four_decked_ships().keys():
-                self.ship_coordinates = {value: Ship.Positions_four_decked_ships()[value]}
+            if len(fleet_composition[0] < 1):
+                fleet_composition[0].append(value)
             else:
-                raise ValueError("Вы не правильно ввели координаты корабля!")
+                raise ValueError("Вы уже добавили четырехпалубный корабль, добавьте оставшиеся корабли!")
+        elif len(value) == 6:
+            if len(fleet_composition[1] < 2):
+                fleet_composition[1].append(value)
+            else:
+                raise ValueError("Вы уже добавили все трехпалубные корабли, добавьте оставшиеся корабли!")
+        elif len(value) == 4:
+            if len(fleet_composition[2] < 3):
+                fleet_composition[2].append(value)
+            else:
+                raise ValueError("Вы уже добавили все двухпалубные корабли, добавьте оставшиеся корабли!")
         else:
-            raise ValueError(
-                "Вы не правильно ввели данные, нужно ввести координаты слитно перечислив те клетки, "
-                "в которых Вы хотите разместить корабль, например, А4А5А6А7 или Г3Д3Е3: ")
-
+            if len(fleet_composition[3] < 4):
+                fleet_composition[3].append(value)
+        return fleet_composition
