@@ -1,10 +1,10 @@
 # Создаем класс "Корабль"
 class Ship:
 
-    def __init__(self, ship_coordinates, dict_values, condition_ship):
+    def __init__(self, ship_coordinates, dict_values, fleet_composition):
         self.ship_coordinates = ship_coordinates
         self.dict_values = dict_values
-        self.condition_ship = condition_ship
+        self.fleet_composition = fleet_composition
 
     # Позиции четырехпалубных кораблей
     @staticmethod
@@ -21,142 +21,57 @@ class Ship:
     @staticmethod
     def Positions_four_decked_ships():
         string_letters_table = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "К"]
+        list_values = []
+        for letter_ in string_letters_table:
+            list_ = []
+            for i in range(1, 11):
+                list_.append(letter_ + str(i))
+            list_values.append(list_)
         four_decked_ships = {}
-        for prev_letters, item_letters, next_letters in Ship.generator_item(string_letters_table):
-            for prev_number, item_number, next_number in Ship.generator_item(range(1, 8)):
+        for prev_letters, item_letters, next_letters in Ship.generator_item(list_values):
+            for prev_number, item_number, next_number in Ship.generator_item(range(7)):
                 if prev_letters is None:
                     if prev_number is None:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            item_letters + str(item_number + 4),
-                            next_letters + str(item_number),
-                            next_letters + str(item_number + 1),
-                            next_letters + str(item_number + 2),
-                            next_letters + str(item_number + 3),
-                            next_letters + str(item_number + 4)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            item_letters[item_number + 4],
+                            *next_letters[item_number:item_number + 5]]
                     elif next_number is None:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            item_letters + str(item_number - 1),
-                            next_letters + str(item_number - 1),
-                            next_letters + str(item_number),
-                            next_letters + str(item_number + 1),
-                            next_letters + str(item_number + 2),
-                            next_letters + str(item_number + 3)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            item_letters[item_number - 1],
+                            *next_letters[item_number - 1:item_number + 4]]
                     else:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            item_letters + str(item_number - 1),
-                            item_letters + str(item_number + 4),
-                            next_letters + str(item_number - 1),
-                            next_letters + str(item_number),
-                            next_letters + str(item_number + 1),
-                            next_letters + str(item_number + 2),
-                            next_letters + str(item_number + 3),
-                            next_letters + str(item_number + 4)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *item_letters[item_number - 1:item_number + 5:5],
+                            *next_letters[item_number - 1:item_number + 5]]
                 elif next_letters is None:
                     if prev_number is None:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            prev_letters + str(item_number),
-                            prev_letters + str(item_number + 1),
-                            prev_letters + str(item_number + 2),
-                            prev_letters + str(item_number + 3),
-                            prev_letters + str(item_number + 4),
-                            item_letters + str(item_number + 4)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *prev_letters[item_number:item_number + 5],
+                            item_letters[item_number + 4]]
                     elif next_number is None:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            prev_letters + str(item_number - 1),
-                            prev_letters + str(item_number),
-                            prev_letters + str(item_number + 1),
-                            prev_letters + str(item_number + 2),
-                            prev_letters + str(item_number + 3),
-                            item_letters + str(item_number - 1)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *prev_letters[item_number - 1:item_number + 4],
+                            item_letters[item_number - 1]]
                     else:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            prev_letters + str(item_number - 1),
-                            prev_letters + str(item_number),
-                            prev_letters + str(item_number + 1),
-                            prev_letters + str(item_number + 2),
-                            prev_letters + str(item_number + 3),
-                            prev_letters + str(item_number + 4),
-                            item_letters + str(item_number - 1),
-                            item_letters + str(item_number + 4)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *prev_letters[item_number - 1:item_number + 5],
+                            *item_letters[item_number - 1:item_number + 5:5]]
                 else:
                     if prev_number is None:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            prev_letters + str(item_number),
-                            prev_letters + str(item_number + 1),
-                            prev_letters + str(item_number + 2),
-                            prev_letters + str(item_number + 3),
-                            prev_letters + str(item_number + 4),
-                            item_letters + str(item_number + 4),
-                            next_letters + str(item_number),
-                            next_letters + str(item_number + 1),
-                            next_letters + str(item_number + 2),
-                            next_letters + str(item_number + 3),
-                            next_letters + str(item_number + 4)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *prev_letters[item_number:item_number + 5],
+                            item_letters[item_number + 4],
+                            *next_letters[item_number:item_number + 5]]
                     elif next_number is None:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            prev_letters + str(item_number - 1),
-                            prev_letters + str(item_number),
-                            prev_letters + str(item_number + 1),
-                            prev_letters + str(item_number + 2),
-                            prev_letters + str(item_number + 3),
-                            item_letters + str(item_number - 1),
-                            next_letters + str(item_number - 1),
-                            next_letters + str(item_number),
-                            next_letters + str(item_number + 1),
-                            next_letters + str(item_number + 2),
-                            next_letters + str(item_number + 3)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *prev_letters[item_number - 1:item_number + 4],
+                            item_letters[item_number - 1],
+                            *next_letters[item_number - 1:item_number + 4]]
                     else:
-                        four_decked_ships[
-                            item_letters + str(item_number) +
-                            item_letters + str(item_number + 1) +
-                            item_letters + str(item_number + 2) +
-                            item_letters + str(item_number + 3)] = [
-                            prev_letters + str(item_number - 1),
-                            prev_letters + str(item_number),
-                            prev_letters + str(item_number + 1),
-                            prev_letters + str(item_number + 2),
-                            prev_letters + str(item_number + 3),
-                            prev_letters + str(item_number + 4),
-                            item_letters + str(item_number - 1),
-                            item_letters + str(item_number + 4),
-                            next_letters + str(item_number - 1),
-                            next_letters + str(item_number),
-                            next_letters + str(item_number + 1),
-                            next_letters + str(item_number + 2),
-                            next_letters + str(item_number + 3),
-                            next_letters + str(item_number + 4)]
+                        four_decked_ships["".join(item_letters[item_number:item_number + 4])] = [
+                            *prev_letters[item_number - 1:item_number + 5],
+                            *item_letters[item_number - 1:item_number + 5:5],
+                            *next_letters[item_number - 1:item_number + 5]]
         return four_decked_ships
 
     @property
@@ -179,7 +94,8 @@ class Ship:
                     list_around_values]
                 self.ship_coordinates = shit
             else:
-                raise ValueError("Вы не правильно ввели координаты корабля!")
+                raise ValueError("Вы не правильно ввели координаты корабля, корабль должен размещаться в одну линию,"
+                                 " вертикально или горизонтально!")
         else:
             raise ValueError(
                 "Вы не правильно ввели данные, нужно ввести координаты слитно перечислив те клетки, "
@@ -191,13 +107,13 @@ class Ship:
             if key in self.dict_values.keys():
                 self.dict_values[key] = item
         return self.dict_values
+
     @property
     def fleet(self):
         return self.fleet_composition
 
     @fleet.setter
     def fleet(self, value):
-        self.fleet_composition = [[], [], [], []]
         if len(value[0]) == 4:
             if len(self.fleet_composition[0]) < 1:
                 self.fleet_composition[0].append(value)
