@@ -17,24 +17,26 @@ battlefield = PlayingField((my_dictionary_values, enemy_dictionary_values))  # �
 battlefield.output_screen
 # Вывод поля боя на экран
 # Ввод координат всех кораблей
-sum_fleet = 0
+my_ship = Ship([], my_dictionary_values, [[], [], [], []])  # Новый объект "Корабль"
 while True:
-    try:
-        my_ship_four_decked_ship = Ship([], my_dictionary_values, [[], [], [], []])  # Новый объект "Корабль"
-        my_ship_four_decked_ship.enter_coordinates_ship = input(
-            "Введите координаты корабля, например: А1А2А3А4 или Г3Д3Е3: ")  # Ввод координат нового корабля
-        my_ship_four_decked_ship.fleet = my_ship_four_decked_ship.ship_coordinates  # Добавление корабля во флот
+    try: # Ввод координат всех кораблей
+        my_ship.enter_coordinates_ship = input("Введите координаты корабля, например: А1А2А3А4 или Г3Д3Е3: ")
+        my_ship.fleet = my_ship.ship_coordinates  # Добавление корабля во флот
         battlefield.output_screen
-        for list_ in my_ship_four_decked_ship.fleet_composition:
-            sum_fleet += len(list_)
-        if sum_fleet == 1:
+        sum_fleet = len(my_ship.fleet_composition[0]) + \
+                    len(my_ship.fleet_composition[1]) + \
+                    len(my_ship.fleet_composition[2]) + \
+                    len(my_ship.fleet_composition[3])
+        print(my_ship.fleet_composition)
+        print(sum_fleet)
+        if sum_fleet == 10:
             print("Ваш флот готов к сражению!")
             break
     except ValueError as e:  # Добавляем тип именно той ошибки которую хотим отловить.
         print(e)
 
 # Выводим экран после добавления корабля
-print(my_ship_four_decked_ship.Positions_four_decked_ships())
+print(my_ship.fleet_composition)
 print(battlefield.symbol(" "))
 print(battlefield.symbol("\u25A0"))
 # Добавляем корабль во флот пользователя
