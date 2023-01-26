@@ -13,8 +13,9 @@ for letter_ in string_letters_table:
         enemy_dictionary_values[letter_ + str(number_)] = " "
 
 # Выводим пустые экраны перед началом игры
-battlefield = PlayingField(my_dictionary_values, enemy_dictionary_values)  # Создали поле боя
-battlefield.output_screen(my_dictionary_values, enemy_dictionary_values)  # Вывод поля боя на экран
+battlefield = PlayingField((my_dictionary_values, enemy_dictionary_values))  # Создали поле боя
+battlefield.output_screen
+# Вывод поля боя на экран
 # Ввод координат всех кораблей
 sum_fleet = 0
 while True:
@@ -23,7 +24,7 @@ while True:
         my_ship_four_decked_ship.enter_coordinates_ship = input(
             "Введите координаты корабля, например: А1А2А3А4 или Г3Д3Е3: ")  # Ввод координат нового корабля
         my_ship_four_decked_ship.fleet = my_ship_four_decked_ship.ship_coordinates  # Добавление корабля во флот
-        battlefield.output_screen(my_ship_four_decked_ship.dict_values, enemy_dictionary_values)
+        battlefield.output_screen
         for list_ in my_ship_four_decked_ship.fleet_composition:
             sum_fleet += len(list_)
         if sum_fleet == 1:
@@ -33,6 +34,7 @@ while True:
         print(e)
 
 # Выводим экран после добавления корабля
-battlefield.output_screen(my_ship_four_decked_ship.dict_values, enemy_dictionary_values)
 print(my_ship_four_decked_ship.Positions_four_decked_ships())
+print(battlefield.symbol(" "))
+print(battlefield.symbol("\u25A0"))
 # Добавляем корабль во флот пользователя

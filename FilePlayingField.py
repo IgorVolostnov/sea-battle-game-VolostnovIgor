@@ -1,12 +1,16 @@
 # Создаем класс "Игровое поле"
 class PlayingField:
-    def __init__(self, my_field_values, enemy_field_values):
-        self.my_field_values = my_field_values
-        self.enemy_field_values = enemy_field_values
+    def __init__(self, screen_game):
+        self.screen_game = screen_game
 
     # Вывод на экран Игрового поля
 
-    def output_screen(self, my_field_values, enemy_field_values):
+    @property
+    def output_screen(self):
+        return self.screen_game
+
+    @output_screen.getter
+    def output_screen(self):
         separator = "          "
         number_field = [" "]
         name_field = ["        Моё поле       ", separator, "    Поле противника    "]
@@ -20,11 +24,19 @@ class PlayingField:
             my_value_field = [letter]
             enemy_value_field = [letter]
             for number_ in range(1, 11):
-                my_list_row_value = "|" + "\u0332" + my_field_values[letter + str(number_)]
+                my_list_row_value = "|" + "\u0332" + self.screen_game[0][letter + str(number_)]
                 my_value_field.append(my_list_row_value)
-                enemy_list_row_value = "|" + "\u0332" + enemy_field_values[letter + str(number_)]
+                enemy_list_row_value = "|" + "\u0332" + self.screen_game[1][letter + str(number_)]
                 enemy_value_field.append(enemy_list_row_value)
             list_row = ["".join(my_value_field) + "|" + separator + "".join(enemy_value_field) + "|"]
             screen.append(list_row)
         for i in range(12):
             print("".join(screen[i]))
+        return self.screen_game
+
+    def symbol(self, value_):
+        number_symbol = 0
+        for item in self.screen_game[0].values():
+            if item == value_:
+                number_symbol += 1
+        return number_symbol
