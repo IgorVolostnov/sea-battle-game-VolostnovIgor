@@ -13,7 +13,7 @@ class PlayingField:
     def output_screen(self):
         separator = "          "
         number_field = [" "]
-        name_field = ["        Моё поле       ", separator, "    Поле противника    "]
+        name_field = ["\033[34m        Моё поле       \033[0m", separator, "\033[31m    Поле противника    \033[0m"]
         string_letters_table = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "К"]
         for number_ in range(1, 11):
             element_string = " " + "\u0332" + str(number_)
@@ -34,9 +34,15 @@ class PlayingField:
             print("".join(screen[i]))
         return self.screen_game
 
+    # Подсчет количества символов, оставшихся на игровом поле
     def symbol(self, value_):
-        number_symbol = 0
-        for item in self.screen_game[0].values():
-            if item == value_:
-                number_symbol += 1
+        number_symbol0 = 0
+        number_symbol1 = 0
+        for item0 in self.screen_game[0].values():
+            if item0 == value_:
+                number_symbol0 += 1
+        for item1 in self.screen_game[1].values():
+            if item1 == value_:
+                number_symbol1 += 1
+        number_symbol = number_symbol0 + number_symbol1
         return number_symbol
