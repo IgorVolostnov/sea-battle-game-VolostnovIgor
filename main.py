@@ -97,7 +97,7 @@ battlefield = PlayingField((my_dictionary_values, enemy_dictionary_values))  # �
 battlefield.output_screen  # Вывод поля боя на экран
 rules()
 # Заполняем поле компьютера кораблями с пустыми значениями
-enemy_ship = Ship([], enemy_dictionary_values, [[], [], [], []], "К", "whole")  # Новый объект "Корабль"
+enemy_ship = Ship([], enemy_dictionary_values, [[], [], [], []], "К", "Whole")  # Новый объект "Корабль"
 while True:
     if input("Начнем игру? ДА/НЕТ: ").upper() == "ДА":
         # Ввод координат всех кораблей компьютера
@@ -118,8 +118,7 @@ while True:
                     continue
         print("\033[31m{}\033[0m".format("Флот компьютера готов к сражению!"))
         # Ввод координат всех кораблей пользователя и формирование флота
-        my_ship = Ship([], my_dictionary_values, [[], [], [], []], "\033[34m\u25A0\033[0m",
-                       "whole")  # Новый объект "Корабль"
+        my_ship = Ship([], my_dictionary_values, [[], [], [], []], "\033[34m\u25A0\033[0m", "Whole")
         while True:
             try:  # Ввод координат всех кораблей
                 input_shit = input_handler(input("\033[34m{}\033[0m".format("Введите координаты корабля, "
@@ -140,13 +139,13 @@ while True:
 
         # Начинаем стрелять
         while True:
-            if battlefield.symbol("\033[31mX\033[0m") == 2:
+            if battlefield.symbol("\033[31mX\033[0m") == 10:
                 print("Все корабли противника уничтожены, Вы победили!")
                 if input("Сыграем ещё раз? ДА/НЕТ: ").upper() == "ДА":
                     break
                 else:
                     sys.exit("До встречи в следующей игре!")
-            elif battlefield.symbol("\033[34mX\033[0m") == 2:
+            elif battlefield.symbol("\033[34mX\033[0m") == 10:
                 print("Все Ваши корабли уничтожены, Компьютер  победил!")
                 if input("Сыграем ещё раз? ДА/НЕТ: ").upper() == "ДА":
                     break
@@ -154,23 +153,24 @@ while True:
                     sys.exit("До встречи в следующей игре!")
             else:
                 while True:
-                    if any([battlefield.symbol("\033[31mX\033[0m") == 10,
-                            battlefield.symbol("\033[34mX\033[0m") == 10]):
-                        break
-                    else:
-                        try:  # Выстрел пользователя
-                            input_shot = input_handler(input("\033[34m{}\033[0m".
-                                                             format("Введите координаты выстрела,"
-                                                                    "например Е2: ")))
-                            enemy_ship.shot_user(input_shot[0])
+                    try:  # Выстрел пользователя
+                        input_shot = input_handler(input("\033[34m{}\033[0m".
+                                                         format("Введите координаты выстрела, например Е2: ")))
+                        enemy_ship.shot_user(input_shot[0])
+                        if any([enemy_ship.condition_ship == "Whole",
+                                enemy_ship.condition_ship == "Wounded"]):
+                            battlefield.output_screen
+                            print("Попадание")
+                        elif enemy_ship.condition_ship == "Miss":
                             battlefield.output_screen
                             print(enemy_ship.fleet_composition)
                             print(battlefield.symbol(" "))
                             print(battlefield.symbol("\033[34m\u25A0\033[0m"))
                             print(battlefield.symbol("\033[31mX\033[0m"))
-                        except ValueError as e:  # Выводим ту ошибку, которая произошла при вводе
-                            battlefield.output_screen
-                            print("\033[31m{}\033[0m".format(e))
+                            break
+                    except ValueError as e:  # Выводим ту ошибку, которая произошла при вводе
+                        battlefield.output_screen
+                        print("\033[31m{}\033[0m".format(e))
     else:
         print("Сыграем в другой раз")
         break

@@ -289,11 +289,13 @@ class Ship:
                     self.dict_values[value] = "\033[31mX\033[0m"
                     enemy_key[value] = "\033[31mX\033[0m"
                     if self.cell_value not in enemy_key.values():
-                        print("Корабль потоплен! Вы ходите ещё раз!")
-                        self.condition_ship = "whole"
+                        print("\033[34mКорабль потоплен! Вы ходите ещё раз!\033[0m")
+                        self.condition_ship = "Whole"
+                        print(self.condition_ship)
+                        return self.condition_ship
                     else:
-                        print("Корабль ранен! Вы ходите ещё раз!")
-                        self.condition_ship = "wounded"
+                        print("\033[34mКорабль ранен! Вы ходите ещё раз!\033[0m")
+                        self.condition_ship = "Wounded"
                     # Закрашиваем клетки, если корабль убит
                     for fleet_item in self.fleet_composition:
                         for list_ in fleet_item:
@@ -305,14 +307,16 @@ class Ship:
                             if self.cell_value not in list_keys:
                                 for key, item in list_[1].items():
                                     list_[1][key] = "\033[31m\u25CF\033[0m"
-
+                    return self.condition_ship
                 else:
-                    raise ValueError("Вы уже стреляли в это место, попробуйте ещё раз!")
+                    raise ValueError("В эту часть корабля уже прилетел снаряд, попробуйте ещё раз!")
             elif self.dict_values[value] == "\033[31m\u25CF\033[0m":
                 raise ValueError("Вы уже стреляли в это место, попробуйте ещё раз!")
             else:
                 self.dict_values[value] = "\033[31m\u25CF\033[0m"
-                raise ValueError("К сожалению это промах")
+                self.condition_ship = "Miss"
+                print("\033[34mК сожалению это промах\033[0m")
+                print(self.condition_ship)
         else:
             raise ValueError("Вы не правильно ввели координаты выстрела, попробуйте ещё раз!")
         # Обновляем словарь
@@ -326,4 +330,4 @@ class Ship:
         for key_list in list_keys_with_values:
             if key_list in self.dict_values.keys():
                 self.dict_values[key_list] = "\033[31m\u25CF\033[0m"
-        return self.dict_values
+        return self.condition_ship
