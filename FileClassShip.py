@@ -267,15 +267,15 @@ class Ship:
 
     # Выстрел компьютера в зависимости от того, выстрел это после ранения или просто выстрел
     def computer_shot(self, previous_shot):
-        if self.condition_ship == "wounded":
-            value_shot = random.choice(Ship.shot()[previous_shot])
+        if self.condition_ship == "Wounded":
+            value_shot = random.choice(Ship.positions_ships(1)[previous_shot])
             return value_shot
         else:
-            value_shot = random.choice(self.dict_values.keys)
+            value_shot = random.choice(list(self.dict_values.keys()))
             return value_shot
 
-    # Выстрел пользователя
-    def shot_user(self, value):
+    # Выстрел
+    def shot_at_ship(self, value, color_symbol):
         enemy_key = {}
         for fleet_item in self.fleet_composition:
             for list_ in fleet_item:
@@ -286,16 +286,14 @@ class Ship:
         if value in self.dict_values.keys():
             if value in enemy_key.keys():
                 if self.dict_values[value] == self.cell_value:
-                    self.dict_values[value] = "\033[31mX\033[0m"
-                    enemy_key[value] = "\033[31mX\033[0m"
+                    self.dict_values[value] = color_symbol  #"\033[31mX\033[0m"
+                    enemy_key[value] = color_symbol
                     if self.cell_value not in enemy_key.values():
-                        print("\033[34mКорабль потоплен! Вы ходите ещё раз!\033[0m")
-                        self.condition_ship = "Whole"
-                        print(self.condition_ship)
-                        return self.condition_ship
+                        print("\033[33m{}\033[0m".format("Корабль потоплен! Вы ходите ещё раз!"))
+                        self.condition_ship = "Whole"  # Корабль убит
                     else:
-                        print("\033[34mКорабль ранен! Вы ходите ещё раз!\033[0m")
-                        self.condition_ship = "Wounded"
+                        print("\033[33m{}\033[0m".format("Корабль ранен! Вы ходите ещё раз!"))
+                        self.condition_ship = "Wounded"  # Корабль ранен
                     # Закрашиваем клетки, если корабль убит
                     for fleet_item in self.fleet_composition:
                         for list_ in fleet_item:
@@ -307,16 +305,14 @@ class Ship:
                             if self.cell_value not in list_keys:
                                 for key, item in list_[1].items():
                                     list_[1][key] = "\033[31m\u25CF\033[0m"
-                    return self.condition_ship
                 else:
                     raise ValueError("В эту часть корабля уже прилетел снаряд, попробуйте ещё раз!")
             elif self.dict_values[value] == "\033[31m\u25CF\033[0m":
                 raise ValueError("Вы уже стреляли в это место, попробуйте ещё раз!")
             else:
                 self.dict_values[value] = "\033[31m\u25CF\033[0m"
-                self.condition_ship = "Miss"
-                print("\033[34mК сожалению это промах\033[0m")
-                print(self.condition_ship)
+                self.condition_ship = "Miss"  # Выстрел мимо
+                print("\033[31m{}\033[0m".format("К сожалению это промах"))
         else:
             raise ValueError("Вы не правильно ввели координаты выстрела, попробуйте ещё раз!")
         # Обновляем словарь
@@ -330,4 +326,4 @@ class Ship:
         for key_list in list_keys_with_values:
             if key_list in self.dict_values.keys():
                 self.dict_values[key_list] = "\033[31m\u25CF\033[0m"
-        return self.condition_ship
+        return self.dict_values

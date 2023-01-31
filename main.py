@@ -97,7 +97,7 @@ battlefield = PlayingField((my_dictionary_values, enemy_dictionary_values))  # �
 battlefield.output_screen  # Вывод поля боя на экран
 rules()
 # Заполняем поле компьютера кораблями с пустыми значениями
-enemy_ship = Ship([], enemy_dictionary_values, [[], [], [], []], "К", "Whole")  # Новый объект "Корабль"
+enemy_ship = Ship([], enemy_dictionary_values, [[], [], [], []], " ", "Whole")  # Новый объект "Корабль"
 while True:
     if input("Начнем игру? ДА/НЕТ: ").upper() == "ДА":
         # Ввод координат всех кораблей компьютера
@@ -117,7 +117,7 @@ while True:
                 except ValueError as e:
                     continue
         print("\033[31m{}\033[0m".format("Флот компьютера готов к сражению!"))
-        # Ввод координат всех кораблей пользователя и формирование флота
+        # Ввод координат всех кораблей пользователя
         my_ship = Ship([], my_dictionary_values, [[], [], [], []], "\033[34m\u25A0\033[0m", "Whole")
         while True:
             try:  # Ввод координат всех кораблей
@@ -138,43 +138,82 @@ while True:
                 print("\033[31m{}\033[0m".format(e))
 
         # Начинаем стрелять
+        prev_input_shot = None
+        hit_list = [None, None]
         while True:
-            if battlefield.symbol("\033[31mX\033[0m") == 10:
-                print("Все корабли противника уничтожены, Вы победили!")
+            if battlefield.symbol("\033[31mX\033[0m") == 20:
+                print("\033[33m{}\033[0m".format("Все корабли противника уничтожены, Вы победили!"))
                 if input("Сыграем ещё раз? ДА/НЕТ: ").upper() == "ДА":
                     break
                 else:
                     sys.exit("До встречи в следующей игре!")
-            elif battlefield.symbol("\033[34mX\033[0m") == 10:
-                print("Все Ваши корабли уничтожены, Компьютер  победил!")
+            elif battlefield.symbol("\033[34mX\033[0m") == 20:
+                print("\033[31m{}\033[0m".format("Все Ваши корабли уничтожены, Компьютер  победил!"))
                 if input("Сыграем ещё раз? ДА/НЕТ: ").upper() == "ДА":
                     break
                 else:
                     sys.exit("До встречи в следующей игре!")
             else:
-                while True:
-                    try:  # Выстрел пользователя
-                        input_shot = input_handler(input("\033[34m{}\033[0m".
-                                                         format("Введите координаты выстрела, например Е2: ")))
-                        enemy_ship.shot_user(input_shot[0])
-                        if any([enemy_ship.condition_ship == "Whole",
-                                enemy_ship.condition_ship == "Wounded"]):
+                if any([enemy_ship.condition_ship == "Whole",
+                        enemy_ship.condition_ship == "Wounded"]):
+                    while True:
+                        try:  # Выстрел пользователя
+                            input_shot = input_handler(input("\033[34m{}\033[0m".
+                                                             format("Введите координаты выстрела, например Е2: ")))
+                            enemy_ship.shot_at_ship(input_shot[0], "\033[31mX\033[0m")
+                            if any([enemy_ship.condition_ship == "Whole",
+                                    enemy_ship.condition_ship == "Wounded"]):
+                                battlefield.output_screen
+                                break
+                            elif enemy_ship.condition_ship == "Miss":
+                                battlefield.output_screen
+                                break
+                        except ValueError as e:  # Выводим ту ошибку, которая произошла при вводе
                             battlefield.output_screen
-                            print("Попадание")
-                        elif enemy_ship.condition_ship == "Miss":
-                            battlefield.output_screen
-                            print(enemy_ship.fleet_composition)
-                            print(battlefield.symbol(" "))
-                            print(battlefield.symbol("\033[34m\u25A0\033[0m"))
-                            print(battlefield.symbol("\033[31mX\033[0m"))
-                            break
-                    except ValueError as e:  # Выводим ту ошибку, которая произошла при вводе
-                        battlefield.output_screen
-                        print("\033[31m{}\033[0m".format(e))
+                            print("\033[31m{}\033[0m".format(e))
+                else:  # Выстрел компьютера
+                    while True:
+                        if all([hit_list[0] == "Wounded", hit_list[1] == "Miss"]):
+                            my_ship.condition_ship = "Wounded"
+                            try:
+                                input_shot = my_ship.computer_shot(prev_input_shot)
+                                my_ship.shot_at_ship(input_shot, "\033[34mX\033[0m")
+                                if my_ship.condition_ship == "Whole":
+                                    hit_list[0] = "Whole"
+                                    battlefield.output_screen
+                                    break
+                                elif my_ship.condition_ship == "Wounded":
+                                    hit_list[0] = "Wounded"
+                                    prev_input_shot = input_shot
+                                    battlefield.output_screen
+                                    break
+                                else:
+                                    hit_list[1] = "Miss"
+                                    battlefield.output_screen
+                                    enemy_ship.condition_ship = "Whole"
+                                    break
+                            except ValueError as e:
+                                continue
+                        else:
+                            try:
+                                input_shot = my_ship.computer_shot(prev_input_shot)
+                                prev_input_shot = input_shot
+                                my_ship.shot_at_ship(prev_input_shot, "\033[34mX\033[0m")
+                                if my_ship.condition_ship == "Whole":
+                                    hit_list[0] = "Whole"
+                                    battlefield.output_screen
+                                    break
+                                elif my_ship.condition_ship == "Wounded":
+                                    hit_list[0] = "Wounded"
+                                    battlefield.output_screen
+                                    break
+                                else:
+                                    hit_list[1] = "Miss"
+                                    battlefield.output_screen
+                                    enemy_ship.condition_ship = "Whole"
+                                    break
+                            except ValueError as e:
+                                continue
     else:
         print("Сыграем в другой раз")
         break
-print(enemy_ship.fleet_composition)
-print(battlefield.symbol(" "))
-print(battlefield.symbol("\033[34m\u25A0\033[0m"))
-print(battlefield.symbol("X"))

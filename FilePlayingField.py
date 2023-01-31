@@ -4,7 +4,6 @@ class PlayingField:
         self.screen_game = screen_game
 
     # Вывод на экран Игрового поля
-
     @property
     def output_screen(self):
         return self.screen_game
