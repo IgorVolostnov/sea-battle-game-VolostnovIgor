@@ -179,17 +179,16 @@ while True:
                                 input_shot = my_ship.computer_shot(prev_input_shot)
                                 my_ship.shot_at_ship(input_shot, "\033[34mX\033[0m")
                                 if my_ship.condition_ship == "Whole":
-                                    hit_list[0] = "Whole"
+                                    hit_list = [None, None]
                                     battlefield.output_screen
                                     break
                                 elif my_ship.condition_ship == "Wounded":
-                                    hit_list[0] = "Wounded"
                                     prev_input_shot = input_shot
                                     battlefield.output_screen
                                     break
                                 else:
-                                    hit_list[1] = "Miss"
                                     battlefield.output_screen
+                                    hit_list = [None, None]
                                     enemy_ship.condition_ship = "Whole"
                                     break
                             except ValueError as e:
@@ -200,7 +199,7 @@ while True:
                                 prev_input_shot = input_shot
                                 my_ship.shot_at_ship(prev_input_shot, "\033[34mX\033[0m")
                                 if my_ship.condition_ship == "Whole":
-                                    hit_list[0] = "Whole"
+                                    hit_list = [None, None]
                                     battlefield.output_screen
                                     break
                                 elif my_ship.condition_ship == "Wounded":

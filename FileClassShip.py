@@ -225,50 +225,50 @@ class Ship:
                     if prev_number is None:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
                             item_letters[item_number + 1],
-                            *next_letters[item_number]]
+                            next_letters[item_number]]
                     elif next_number is None:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
                             item_letters[item_number - 1],
-                            *next_letters[item_number]]
+                            next_letters[item_number]]
                     else:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
                             *item_letters[item_number - 1:item_number + 2:2],
-                            *next_letters[item_number]]
+                            next_letters[item_number]]
                 elif next_letters is None:
                     if prev_number is None:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
-                            *prev_letters[item_number],
+                            prev_letters[item_number],
                             item_letters[item_number + 1]]
                     elif next_number is None:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
-                            *prev_letters[item_number],
+                            prev_letters[item_number],
                             item_letters[item_number - 1]]
                     else:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
-                            *prev_letters[item_number],
+                            prev_letters[item_number],
                             *item_letters[item_number - 1:item_number + 2:2]]
                 else:
                     if prev_number is None:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
-                            *prev_letters[item_number],
+                            prev_letters[item_number],
                             item_letters[item_number + 1],
-                            *next_letters[item_number]]
+                            next_letters[item_number]]
                     elif next_number is None:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
-                            *prev_letters[item_number],
+                            prev_letters[item_number],
                             item_letters[item_number - 1],
-                            *next_letters[item_number]]
+                            next_letters[item_number]]
                     else:
                         decked_ships["".join(item_letters[item_number:item_number + 1])] = [
-                            *prev_letters[item_number],
+                            prev_letters[item_number],
                             *item_letters[item_number - 1:item_number + 2:2],
-                            *next_letters[item_number]]
+                            next_letters[item_number]]
         return decked_ships
 
     # Выстрел компьютера в зависимости от того, выстрел это после ранения или просто выстрел
     def computer_shot(self, previous_shot):
         if self.condition_ship == "Wounded":
-            value_shot = random.choice(Ship.positions_ships(1)[previous_shot])
+            value_shot = random.choice(Ship.shot()[previous_shot])
             return value_shot
         else:
             value_shot = random.choice(list(self.dict_values.keys()))
