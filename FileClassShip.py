@@ -1,5 +1,7 @@
 import random
 
+from My_Exception import MyException
+
 
 # Создаем класс "Корабль"
 class Ship:
@@ -149,8 +151,9 @@ class Ship:
 
         for cell_ in value:
             if cell_ in list_keys:
-                raise ValueError("По правилам игры, корабли должны находится друг от друга на расстоянии "
-                                 "минимум одной клетки")
+                raise MyException("Ошибка ввода координат корабля: ",
+                                  "По правилам игры, корабли должны находится друг от друга на расстоянии "
+                                  "минимум одной клетки")
 
         # Проверяем входят ли координаты в игровое поле
         if all([len(value) < 5, len(value) > 0]):
@@ -169,37 +172,42 @@ class Ship:
                         self.ship_coordinates = shit
                         self.fleet_composition[0].append(self.ship_coordinates)
                     else:
-                        raise ValueError("Будьте внимательны! Вы уже добавили четырехпалубный корабль, "
-                                         "но у Вас ещё остались другие не добавленные корабли!")
+                        raise MyException("Ошибка ввода координат корабля: ",
+                                          "Будьте внимательны! Вы уже добавили четырехпалубный корабль, "
+                                          "но у Вас ещё остались другие не добавленные корабли!")
                 elif len(value) == 3:
                     if len(self.fleet_composition[1]) < 2:
                         self.ship_coordinates = shit
                         self.fleet_composition[1].append(self.ship_coordinates)
                     else:
-                        raise ValueError("Вы уже добавили все трехпалубные корабли, "
-                                         "но у Вас ещё остались другие не добавленные корабли!")
+                        raise MyException("Ошибка ввода координат корабля: ",
+                                          "Вы уже добавили все трехпалубные корабли, "
+                                          "но у Вас ещё остались другие не добавленные корабли!")
                 elif len(value) == 2:
                     if len(self.fleet_composition[2]) < 3:
                         self.ship_coordinates = shit
                         self.fleet_composition[2].append(self.ship_coordinates)
                     else:
-                        raise ValueError("Вы уже добавили все двухпалубные корабли, "
-                                         "но у Вас ещё остались другие не добавленные корабли!")
+                        raise MyException("Ошибка ввода координат корабля: ",
+                                          "Вы уже добавили все двухпалубные корабли, "
+                                          "но у Вас ещё остались другие не добавленные корабли!")
                 elif len(value) == 1:
                     if len(self.fleet_composition[3]) < 4:
                         self.ship_coordinates = shit
                         self.fleet_composition[3].append(self.ship_coordinates)
                     else:
-                        raise ValueError("Вы уже добавили все однопалубные корабли, "
-                                         "но у Вас ещё остались другие не добавленные корабли!")
+                        raise MyException("Ошибка ввода координат корабля: ",
+                                          "Вы уже добавили все однопалубные корабли, "
+                                          "но у Вас ещё остались другие не добавленные корабли!")
 
             else:
-                raise ValueError("Вы не правильно ввели координаты корабля, корабль должен размещаться в одну линию,"
-                                 " вертикально или горизонтально!")
+                raise MyException("Ошибка ввода координат корабля: ",
+                                  "Вы не правильно ввели координаты корабля, корабль должен размещаться в одну линию,"
+                                  " вертикально или горизонтально!")
         else:
-            raise ValueError(
-                "Вы не правильно ввели данные, нужно ввести координаты слитно перечислив те клетки, "
-                "в которых Вы хотите разместить корабль, например, А4А5А6А7 или Г3Д3Е3: ")
+            raise MyException("Ошибка ввода координат корабля: ",
+                              "Вы не правильно ввели данные, нужно ввести координаты слитно перечислив те клетки, "
+                              "в которых Вы хотите разместить корабль, например, А4А5А6А7 или Г3Д3Е3: ")
         for key, item in self.ship_coordinates[0].items():
             if key in self.dict_values.keys():
                 self.dict_values[key] = item
@@ -286,7 +294,7 @@ class Ship:
         if value in self.dict_values.keys():
             if value in enemy_key.keys():
                 if self.dict_values[value] == self.cell_value:
-                    self.dict_values[value] = color_symbol  #"\033[31mX\033[0m"
+                    self.dict_values[value] = color_symbol  # "\033[31mX\033[0m"
                     enemy_key[value] = color_symbol
                     if self.cell_value not in enemy_key.values():
                         print("\033[33m{}\033[0m".format("Корабль потоплен! Вы ходите ещё раз!"))
@@ -306,15 +314,18 @@ class Ship:
                                 for key, item in list_[1].items():
                                     list_[1][key] = "\033[31m\u25CF\033[0m"
                 else:
-                    raise ValueError("В эту часть корабля уже прилетел снаряд, попробуйте ещё раз!")
+                    raise MyException("Ошибка ввода координат выстрела: ",
+                                      "В эту часть корабля уже прилетел снаряд, попробуйте ещё раз!")
             elif self.dict_values[value] == "\033[31m\u25CF\033[0m":
-                raise ValueError("Вы уже стреляли в это место, попробуйте ещё раз!")
+                raise MyException("Ошибка ввода координат выстрела: ",
+                                  "Вы уже стреляли в это место, попробуйте ещё раз!")
             else:
                 self.dict_values[value] = "\033[31m\u25CF\033[0m"
                 self.condition_ship = "Miss"  # Выстрел мимо
                 print("\033[31m{}\033[0m".format("К сожалению это промах"))
         else:
-            raise ValueError("Вы не правильно ввели координаты выстрела, попробуйте ещё раз!")
+            raise MyException("Ошибка ввода координат выстрела: ",
+                              "Вы не правильно ввели координаты выстрела, попробуйте ещё раз!")
         # Обновляем словарь
         list_keys_with_values = []
         for fleet_item in self.fleet_composition:

@@ -1,8 +1,10 @@
+import random
+import sys
+
 from FilePlayingField import PlayingField
 from FileClassShip import Ship
 from transliterate import translit
-import random
-import sys
+from My_Exception import MyException
 
 
 # Игра Морской бой
@@ -114,7 +116,7 @@ while True:
                                 len(enemy_ship.fleet_composition[3])
                     if sum_fleet == i[1]:
                         break
-                except ValueError as e:
+                except MyException as e:
                     continue
         print("\033[31m{}\033[0m".format("Флот компьютера готов к сражению!"))
         # Ввод координат всех кораблей пользователя
@@ -134,8 +136,9 @@ while True:
                     print("\033[34m{}\033[0m".format("Ваш флот готов к сражению!"))
                     break
 
-            except ValueError as e:  # Выводим ту ошибку, которая произошла при вводе
-                print("\033[31m{}\033[0m".format(e))
+            except MyException as e:  # Выводим ту ошибку, которая произошла при вводе
+                print("\033[31m{}\033[0m".format(e.message))
+                print("\033[31m{}\033[0m".format(e.errors))
 
         # Начинаем стрелять
         prev_input_shot = None
@@ -168,9 +171,10 @@ while True:
                             elif enemy_ship.condition_ship == "Miss":
                                 battlefield.output_screen
                                 break
-                        except ValueError as e:  # Выводим ту ошибку, которая произошла при вводе
+                        except MyException as e:  # Выводим ту ошибку, которая произошла при вводе
                             battlefield.output_screen
-                            print("\033[31m{}\033[0m".format(e))
+                            print("\033[31m{}\033[0m".format(e.message))
+                            print("\033[31m{}\033[0m".format(e.errors))
                 else:  # Выстрел компьютера
                     while True:
                         if all([hit_list[0] == "Wounded", hit_list[1] == "Miss"]):
@@ -191,7 +195,7 @@ while True:
                                     hit_list = [None, None]
                                     enemy_ship.condition_ship = "Whole"
                                     break
-                            except ValueError as e:
+                            except MyException as e:
                                 continue
                         else:
                             try:
@@ -211,7 +215,7 @@ while True:
                                     battlefield.output_screen
                                     enemy_ship.condition_ship = "Whole"
                                     break
-                            except ValueError as e:
+                            except MyException as e:
                                 continue
     else:
         print("Сыграем в другой раз")
